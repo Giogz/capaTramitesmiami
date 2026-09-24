@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #16181d;
+  --ink-2: #565b67;
+  --ink-3: #878d9b;
+  --paper: #ffffff;
+  --surface: #f2f3f6;
+  --surface-2: #e8eaef;
+  --line: #e0e3ea;
+  --line-2: #cdd2db;
+  --red: #c8102e;
+  --red-deep: #99001f;
+  --red-tint: #fbe9ec;
+  --amber: #8a5a00;
+  --amber-tint: #faf0d8;
+  --ok: #1f7a4d;
+  --ok-tint: #e6f2ea;
+  --top: calc(60px + env(safe-area-inset-top, 0px));
+  --bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+}
+
+.dark {
+  --ink: #eef0f4;
+  --ink-2: #b3b9c6;
+  --ink-3: #828997;
+  --paper: #191b21;
+  --surface: #0f1116;
+  --surface-2: #22252d;
+  --line: #2b2f38;
+  --line-2: #3a3f4a;
+  --red: #f26177;
+  --red-deep: #f9899a;
+  --red-tint: #3a1620;
+  --amber: #e7bf6a;
+  --amber-tint: #33290f;
+  --ok: #5fca97;
+  --ok-tint: #12261c;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--top);
+  }
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+    margin: 0;
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+@layer components {
+  /* Recuadros de texto enriquecido dentro de requisitos */
+  .rich-code {
+    @apply font-mono text-[0.85em] text-peru bg-peru-tint px-1.5 py-0.5 rounded;
+  }
+  /* Barras superior/inferior translúcidas (evita opacidad sobre var()) */
+  .bar-glass {
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+  }
+  /* Bordes tintados sin depender del modificador /opacity de Tailwind */
+  .note-amber {
+    border-color: color-mix(in srgb, var(--amber) 40%, transparent);
+  }
+  .badge-ok {
+    border-color: color-mix(in srgb, var(--ok) 30%, transparent);
+  }
+}
+
+/* Barra de scroll discreta */
+.slide-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.slide-scroll::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 100px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* ---- Ficha Registral interactiva (campos sobre la imagen real) ---- */
+.ficha-sheet {
+  container-type: inline-size;
+  position: relative;
+  width: clamp(660px, 92vw, 900px);
+  margin-inline: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+.ficha-sheet img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+.ficha-overlay {
+  position: absolute;
+  inset: 0;
+  font-size: 1.5cqw; /* escala con el ancho de la ficha */
+}
+.ff {
+  position: absolute;
+  border: none;
+  background: transparent;
+  color: #123a8a; /* tinta azul, como el llenado a mano */
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0 0.15em;
+  box-sizing: border-box;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.ff.hl {
+  background: rgba(250, 214, 90, 0.32);
+  border-radius: 2px;
+}
+.ff:focus {
+  outline: none;
+  background: rgba(250, 214, 90, 0.6);
+  border-radius: 2px;
+}
+.fc {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #b4122b; /* marca en rojo, resalta sobre el formulario */
+  font-weight: 800;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.fc.hl {
+  background: rgba(250, 214, 90, 0.32);
+  border-radius: 2px;
+}
+/* La ficha es siempre blanca: mantener la tinta azul/roja también en modo oscuro */
+.dark .ff { color: #123a8a; }
+.dark .fc { color: #b4122b; }
+
+/* ---- Formatos y modelos: hojas rellenables ---- */
+.fdoc {
+  max-width: 760px;
+  margin-inline: auto;
+  background: #ffffff;
+  color: #1a1c22;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.12);
+  padding: clamp(22px, 4.5vw, 48px);
+  font-family: 'Libre Franklin', system-ui, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.fdoc h2 { font-family: 'Fraunces', Georgia, serif; }
+/* Campo rellenable en línea */
+.fin {
+  border: none;
+  border-bottom: 1px solid #9aa2b1;
+  background: transparent;
+  color: #123a8a;
+  font: inherit;
+  font-weight: 600;
+  padding: 0 3px;
+  min-width: 2ch;
+  text-transform: uppercase;
+}
+.fin.hl { background: rgba(250, 214, 90, 0.32); border-radius: 2px 2px 0 0; }
+.fin:focus { outline: none; background: rgba(250, 214, 90, 0.6); border-bottom-color: #123a8a; }
+.fin::placeholder { color: #b9c0cc; font-weight: 500; text-transform: none; }
+/* Caja de huella de referencia */
+.fhuella {
+  display: inline-grid;
+  place-items: center;
+  gap: 2px;
+  border: 1px solid #9aa2b1;
+  color: #123a8a;
+  background: #fbfcfe;
+  text-align: center;
+}
+.fhuella .lbl { font-size: 9px; letter-spacing: .04em; color: #7a8496; text-transform: uppercase; }
+/* Rejilla de huellas (toma de impresiones) */
+.fgrid { border-collapse: collapse; width: 100%; }
+.fgrid th, .fgrid td { border: 1px solid #9aa2b1; padding: 4px; text-align: center; vertical-align: middle; }
+.fgrid th { background: #f2f4f8; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; color: #444b59; }
+.fgrid .finger { font-size: 12px; font-weight: 600; color: #333; white-space: nowrap; }
